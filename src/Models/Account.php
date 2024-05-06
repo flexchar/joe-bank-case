@@ -1,0 +1,76 @@
+<?php
+
+namespace JoeCase\Models;
+
+use JoeCase\Types\TransactionType;
+use JoeCase\Foundation\AbstractAccount;
+
+class Account extends AbstractAccount
+{
+    public function __construct(
+        public readonly string $accountNumber,
+        public int $balance,
+        public array $transactions = [],
+    ) {
+    }
+
+    public function getCountOfWithdrawals(): int
+    {
+        $ofTypeWithdraw = array_filter(
+            $this->transactions,
+            fn(Transaction $t) => $t->type === TransactionType::WITHDRAW,
+        );
+
+        return count($ofTypeWithdraw);
+    }
+
+    public function getCountOfDeposits(): int
+    {
+        $ofTypeDeposit = array_filter(
+            $this->transactions,
+            fn(Transaction $t) => $t->type === TransactionType::DEPOSIT,
+        );
+
+        return count($ofTypeDeposit);
+    }
+
+    public function getBalance(): int
+    {
+        // Typically a database query would be done here summing up all transactions...
+        // Possibly with caching but that is risky business in the context of a bank account.
+
+        return $this->balance;
+    }
+
+    public function deposit(int $amount): void
+    {
+        $transaction = new Transaction(
+            type: TransactionType::DEPOSIT,
+            amount: $amount,
+        );
+
+        $this->transactions[] = $transaction;
+        $this->balance += $amount;
+    }
+
+    public function withdraw(int $amount): void
+    {
+        $transaction = new Transaction(
+            type: TransactionType::WITHDRAW,
+            amount: $amount,
+        );
+
+        $this->transactions[] = $transaction;
+        $this->balance -= $amount;
+    }
+
+    // This is a bad place for this method because it is not the responsibility of the Account to transfer money.
+    protected function doInternalTransaction(
+        Account $sourceAccount,
+        Account $destinationAccount,
+        int $amount,
+    ) {
+        $sourceAccount->withdraw($amount);
+        $destinationAccount->deposit($amount);
+    }
+}
