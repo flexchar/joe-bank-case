@@ -2,15 +2,18 @@
 
 namespace JoeCase\Models;
 
+use JoeCase\Models\Transaction;
 use JoeCase\Types\TransactionType;
 use JoeCase\Foundation\AbstractAccount;
 
 class Account extends AbstractAccount
 {
+    /** @var Transaction[] */
+    public array $transactions = [];
+
     public function __construct(
         public readonly string $accountNumber,
         public int $balance,
-        public array $transactions = [],
     ) {
     }
 
@@ -69,7 +72,7 @@ class Account extends AbstractAccount
         Account $sourceAccount,
         Account $destinationAccount,
         int $amount,
-    ) {
+    ): void {
         $sourceAccount->withdraw($amount);
         $destinationAccount->deposit($amount);
     }

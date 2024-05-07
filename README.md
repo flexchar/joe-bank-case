@@ -9,9 +9,9 @@
 
 ### ToDo:
 
--   [ ] Setup phpstan
--   [ ] Review variables
--   [ ] Setup php-unit
+-   [x] Setup phpstan
+-   [x] Review variables
+-   [x] Setup php-unit
 
 ### Given todo
 

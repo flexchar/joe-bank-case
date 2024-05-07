@@ -16,10 +16,12 @@ use JoeCase\Foundation\AbstractAccount;
  */
 class Bank implements BankInterface
 {
+    /** @var AbstractAccount[] */
+    public array $accounts = [];
+
     public function __construct(
         public readonly string $name,
         public readonly string $address,
-        public array $accounts = [],
     ) {
     }
 
@@ -28,6 +30,7 @@ class Bank implements BankInterface
         $this->accounts[] = $account;
     }
 
+    /** @return AbstractAccount[] */
     public function getAccounts(): array
     {
         return $this->accounts;
