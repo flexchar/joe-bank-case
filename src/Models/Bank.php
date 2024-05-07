@@ -6,13 +6,14 @@ use JoeCase\Interfaces\BankInterface;
 use JoeCase\Foundation\AbstractAccount;
 
 /**
- * The Bank class represents a bank
- * The bank have these main features:
- *  - Has zero or more bank accounts
- *  - Must have an address.
- *  - Must have a name
- *  - Can perform a money transfer between accounts in the bank.
- *  - Can return a "Postal Address" created from the name of the bank and the address.
+ * The Bank class represents a bank.
+ *
+ * This class has the following main features:
+ *  - It can have zero or more bank accounts.
+ *  - It must have an address.
+ *  - It must have a name.
+ *  - It can perform a money transfer between accounts in the bank.
+ *  - It can return a "Postal Address" created from the name of the bank and the address.
  */
 class Bank implements BankInterface
 {

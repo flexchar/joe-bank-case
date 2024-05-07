@@ -6,6 +6,14 @@ use JoeCase\Models\Transaction;
 use JoeCase\Types\TransactionType;
 use JoeCase\Foundation\AbstractAccount;
 
+/**
+ * Represents a bank account.
+ *
+ * A bank account has the following main features:
+ *  - Must have a unique account_number
+ *  - Knows its current balance
+ *  - Keeps track of its transaction history (withdrawals and deposits)
+ */
 class Account extends AbstractAccount
 {
     /** @var Transaction[] */
@@ -15,6 +23,7 @@ class Account extends AbstractAccount
         public readonly string $accountNumber,
         public int $balance,
     ) {
+        // Optionally perform a check here to ensure that the account number is unique.
     }
 
     public function getCountOfWithdrawals(): int
@@ -50,6 +59,7 @@ class Account extends AbstractAccount
         $transaction = new Transaction(
             type: TransactionType::DEPOSIT,
             amount: $amount,
+            timestamp_sec: time(),
         );
 
         $this->transactions[] = $transaction;
@@ -61,6 +71,7 @@ class Account extends AbstractAccount
         $transaction = new Transaction(
             type: TransactionType::WITHDRAW,
             amount: $amount,
+            timestamp_sec: time(),
         );
 
         $this->transactions[] = $transaction;

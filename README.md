@@ -15,10 +15,9 @@
 
 ### Given todo
 
--   [ ] Implement PSR-2
--   [ ] Easily Testable (error-free)
--   [ ] Implement PSR
--   [ ] Well-documented
+-   [x] Implement PSR-2
+-   [x] Easily Testable (error-free)
+-   [x] Well-documented
 
 ## Thoughts
 
