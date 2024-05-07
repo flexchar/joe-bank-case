@@ -8,12 +8,19 @@ use PHPUnit\Framework\TestCase;
 
 class BankTest extends TestCase
 {
-    public function test_bank_can_print_postal_address(): void
+    public function getBankAccount(): Bank
     {
         $name = 'JOE & THE BANK';
         $address = "Joe Street,\nCopenhagen";
 
         $bank = new Bank(name: $name, address: $address);
+
+        return $bank;
+    }
+
+    public function test_bank_can_print_postal_address(): void
+    {
+        $bank = $this->getBankAccount();
 
         $postalAddress = $bank->getPostalAddress();
 
@@ -25,10 +32,7 @@ class BankTest extends TestCase
 
     public function test_bank_can_add_accounts(): void
     {
-        $bank = new Bank(
-            name: 'JOE & THE BANK',
-            address: "Joe Street,\nCopenhagen",
-        );
+        $bank = $this->getBankAccount();
 
         $first_account_number = 'ab01';
         $first_account = new Account(
@@ -48,12 +52,10 @@ class BankTest extends TestCase
         $this->assertCount(2, $bank->getAccounts());
     }
 
+
     public function test_bank_can_transfer_money(): void
     {
-        $bank = new Bank(
-            name: 'JOE & THE BANK',
-            address: "Joe Street,\nCopenhagen",
-        );
+        $bank = $this->getBankAccount();
 
         $first_account_number = 'ab01';
         $firstAccount = new Account(
