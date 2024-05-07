@@ -4,6 +4,7 @@ namespace JoeCase\Models;
 
 use JoeCase\Interfaces\BankInterface;
 use JoeCase\Foundation\AbstractAccount;
+use JoeCase\Exceptions\DuplicateAccountAdded;
 
 /**
  * The Bank class represents a bank.
@@ -28,6 +29,22 @@ class Bank implements BankInterface
 
     public function addBankAccount(AbstractAccount $account): void
     {
+        // Validate that the account number is unique in the existing accounts
+        $existingAccountNumbers = array_map(
+            fn(AbstractAccount $account) => $account->getAccountNumber(),
+            $this->accounts,
+        );
+
+        if (
+            in_array(
+                $account->getAccountNumber(),
+                $existingAccountNumbers,
+                true,
+            )
+        ) {
+            throw new DuplicateAccountAdded($account->getAccountNumber());
+        }
+
         $this->accounts[] = $account;
     }
 
