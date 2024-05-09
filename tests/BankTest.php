@@ -5,15 +5,23 @@ namespace Tests;
 use JoeCase\Models\Bank;
 use JoeCase\Models\Account;
 use PHPUnit\Framework\TestCase;
+use JoeCase\Exceptions\DuplicateAccountAdded;
 
 class BankTest extends TestCase
 {
-    public function test_bank_can_print_postal_address(): void
+    public function getBankAccount(): Bank
     {
         $name = 'JOE & THE BANK';
         $address = "Joe Street,\nCopenhagen";
 
         $bank = new Bank(name: $name, address: $address);
+
+        return $bank;
+    }
+
+    public function test_bank_can_print_postal_address(): void
+    {
+        $bank = $this->getBankAccount();
 
         $postalAddress = $bank->getPostalAddress();
 
@@ -25,10 +33,7 @@ class BankTest extends TestCase
 
     public function test_bank_can_add_accounts(): void
     {
-        $bank = new Bank(
-            name: 'JOE & THE BANK',
-            address: "Joe Street,\nCopenhagen",
-        );
+        $bank = $this->getBankAccount();
 
         $first_account_number = 'ab01';
         $first_account = new Account(
@@ -48,12 +53,29 @@ class BankTest extends TestCase
         $this->assertCount(2, $bank->getAccounts());
     }
 
+    public function test_bank_can_only_add_unique_accounts(): void
+    {
+        $bank = $this->getBankAccount();
+
+        $first_account_number = 'ab01';
+        $firstAccount = new Account(
+            accountNumber: $first_account_number,
+            balance: 0,
+        );
+        $secondAccount = new Account(
+            accountNumber: $first_account_number,
+            balance: 0,
+        );
+
+        $bank->addBankAccount($firstAccount);
+
+        $this->expectException(DuplicateAccountAdded::class);
+        $bank->addBankAccount($secondAccount);
+    }
+
     public function test_bank_can_transfer_money(): void
     {
-        $bank = new Bank(
-            name: 'JOE & THE BANK',
-            address: "Joe Street,\nCopenhagen",
-        );
+        $bank = $this->getBankAccount();
 
         $first_account_number = 'ab01';
         $firstAccount = new Account(

@@ -26,6 +26,11 @@ class Account extends AbstractAccount
         // Optionally perform a check here to ensure that the account number is unique.
     }
 
+    public function getAccountNumber(): string
+    {
+        return $this->accountNumber;
+    }
+
     public function getCountOfWithdrawals(): int
     {
         $ofTypeWithdraw = array_filter(
